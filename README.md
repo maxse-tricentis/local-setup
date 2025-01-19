@@ -46,3 +46,9 @@ brew install neovim
 mkdir -p ~/.config/nvim
 cp -a ./nvim ~/.config/nvim
 ```
+
+## Az CLI Shortcuts
+```sh
+brew install azure-cli
+cp ./az_helpers.sh ~/.az_helpers.sh
+```
