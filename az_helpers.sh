@@ -1,4 +1,19 @@
+## General
+check_prereqs() {
+  for cmd in "$@"
+  do
+    if ! command -v "$cmd" &> /dev/null
+    then
+        echo "Command $cmd is not in PATH. Make sure the prerequisites are installed:"
+        echo "$@"
+        return 1
+    fi
+  done
+  return 0
+}
+##
 
+## Azure
 alias az_aks_list='az aks list --output table --query "[].{name:name, location:location, resourceGroup:resourceGroup, provisioningState: provisioningState}"'
 alias az_pipelines_list='az pipelines list --output table --query "[].{name:name, project:project.name, author:authoredBy.uniqueName}"'
 alias az_devops_teams_list='az devops team list --output table --query "[].{name:name, project:projectName}"'
@@ -88,10 +103,43 @@ az_cr_login() {
 
   podman login -u "$user" -p "$token" "$registry"
 }
+##
 
+## MongoDB
+mongo_connect() {
+  check_prereqs atlas gum curl openssl sed awk date || return 1
+  local projects
+  local project_id
+  local clusters
+  local cluster_name
+  local username
+  local duration_hr
+  local delete_after
+  local password
+
+  atlas auth login 2> /dev/null
+
+  projects=$(atlas projects list) || return 1
+  project_id=$(echo "$projects" | sed '1d' | gum filter --header="Choose the project:" | awk '{print $1}') || return 1
+  clusters=$(atlas clusters list --projectId="$project_id") || return 1
+  cluster_name=$(echo "$clusters" | sed '1d' | gum filter --header="Choose the cluster" | awk '{print $2}') || return 1
+  username="${USER//./}_$(date -u "+%Y%m%dT%H%M%S")" || return 1
+  duration_hr="$(gum choose --header 'Remove the access after:' 1H 3H 6H)" || return 1
+  delete_after="$(date -u -v"+$duration_hr" '+%Y-%m-%dT%H:%M:%SZ')" || return 1
+  password="$(openssl rand -hex 12)"
+
+  atlas dbusers create atlasAdmin --username="$username" --projectId="$project_id" --deleteAfter="$delete_after" -p "$password" || return 1
+  atlas accessList create --currentIp --deleteAfter="$delete_after" --projectId="$project_id" || return 1
+  echo ''
+  atlas clusters connectionStrings describe --projectId="$project_id" "$cluster_name" | sed "s|srv://|srv://${username}:${password}@|g"
+}
+##
+
+## Random
 ananke_set_env_spoke() {
   export AZURE_STORAGE_ACCOUNT='olympiacstate'
   source <(echo -n "export AZURE_PAT_TOKEN='op://Employee/azure_devops_pat/credential'" | op inject)
   source ./src/SharedResources/scripts/pulumi_login.sh --resource-type 'spoke' --az-devops-pat "$AZURE_PAT_TOKEN"
 }
+##
 
