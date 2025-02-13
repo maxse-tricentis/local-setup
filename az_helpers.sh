@@ -18,6 +18,9 @@ alias az_aks_list='az aks list --output table --query "[].{name:name, location:l
 alias az_pipelines_list='az pipelines list --output table --query "[].{name:name, project:project.name, author:authoredBy.uniqueName}"'
 alias az_devops_teams_list='az devops team list --output table --query "[].{name:name, project:projectName}"'
 alias az_devops_users_list='az devops user list --output table --query "items[].{user:user.principalName, kind:user.subjectKind, lastAccess:lastAccessedDate}"'
+alias az_sapd_bastion_tun='az network bastion tunnel --subscription "Tricentis Cloud - dev" --name "tplat-weu-sapd-hub-lab-bastion-host" --resource-group "tplat-sapd-wan-rg" --target-resource-id "/subscriptions/065c5ab3-e7e4-4a0e-b64a-f5afd3d71006/resourceGroups/tplat-sapd-wan-rg/providers/Microsoft.Compute/virtualMachines/sapd-all-sre-vm" --resource-port "22" --port "2222"'
+alias az_sapp_bastion_tun='az network bastion tunnel --subscription "TTA-Tricentis-Prod" --name "tplat-weu-sapp-hub-lab-bastion-host" --resource-group "tplat-sapp-wan-rg" --target-resource-id "/subscriptions/177f5dc4-63e7-4c3d-9f5c-bd643e8238d3/resourceGroups/tplat-sapp-wan-rg/providers/Microsoft.Compute/virtualMachines/sapp-all-sre-vm" --resource-port "22" --port "2223"'
+alias az_sapeea_bastion_tun='az network bastion tunnel --subscription "TTA-Tricentis-Prod-EU" --name "tplat-weu-sappeea-hub-lab-bastion-host" --resource-group "tplat-sappeea-wan-rg" --target-resource-id "/subscriptions/3a4689bf-8f7e-44c6-9d1e-64afbac68f72/resourceGroups/tplat-sappeea-wan-rg/providers/Microsoft.Compute/virtualMachines/sappeea-all-sre-vm" --resource-port "22" --port "2224"'
 
 az_info() {
   echo 'Azure Cloud'

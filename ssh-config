@@ -1,0 +1,21 @@
+Host bastion-sapd
+    HostName localhost
+    User azureuser
+    Port 2222
+    IdentityFile ~/.ssh/sapd
+    LocalForward 6443 tplat-weu-sapd-001-dns-203f4514.hcp.westeurope.azmk8s.io:443
+
+Host bastion-sapp
+    HostName localhost
+    User azureuser
+    Port 2223
+    IdentityFile ~/.ssh/sapp
+    LocalForward 6443 tplat-eus-sapp-002-dns-etr6i4hu.hcp.eastus.azmk8s.io:443
+    LocalForward 6444 tplat-weu-sapp-001-dns-w6e63d63.hcp.westeurope.azmk8s.io:443
+
+Host bastion-sappeea
+    HostName localhost
+    User azureuser
+    Port 2224
+    IdentityFile ~/.ssh/sappeea
+    LocalForward 6443 htplat-weu-sappeea-001-dns-rkppcb3k.hcp.westeurope.azmk8s.io:443
