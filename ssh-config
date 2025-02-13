@@ -18,4 +18,4 @@ Host bastion-sappeea
     User azureuser
     Port 2224
     IdentityFile ~/.ssh/sappeea
-    LocalForward 6443 htplat-weu-sappeea-001-dns-rkppcb3k.hcp.westeurope.azmk8s.io:443
+    LocalForward 6443 tplat-weu-sappeea-001-dns-rkppcb3k.hcp.westeurope.azmk8s.io:443
